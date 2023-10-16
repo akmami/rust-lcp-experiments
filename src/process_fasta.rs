@@ -51,7 +51,15 @@ pub fn process_fasta(fasta_path: &str) {
 
     // let result_file_path = if fasta_path.ends_with(".fa") { &fasta_path[..fasta_path.len()-3] } else { &fasta_path[..fasta_path.len()-6] };
 
+    let mut chrom_index = 0;
+
     while let Some(record) = reader.next() {
+
+        if chrom_index == 23 {
+            break;
+        }
+        chrom_index += 1;
+
         let record = record.unwrap();
         let id = record.id().unwrap();
         println!("Processing: {}", id);
@@ -84,20 +92,20 @@ pub fn process_fasta(fasta_path: &str) {
                         if core.start-prev_index_end < 10000 {
                             distances[core.start-prev_index_end] += 1;
                         } else {
-                            println!("Found large distance in level {}, core index: {}, core.start: {}, core.end: {}, prev_core.start: {}, prev_core.end: {}", i, index, core.start, core.end, prev_index_start, prev_index_end)
+                            // println!("Found large distance in level {}, core index: {}, core.start: {}, core.end: {}, prev_core.start: {}, prev_core.end: {}", i, index, core.start, core.end, prev_index_start, prev_index_end)
                         }
                     }
                     
                     if core.start-prev_index_start < 10000 {
                         distances_pos[core.start-prev_index_start] += 1;
                     } else {
-                        println!("Found large distance between start pos in level {}, core index: {}, core.start: {}, core.end: {}, prev_core.start: {}, prev_core.end: {}", i, index, core.start, core.end, prev_index_start, prev_index_end)
+                        // println!("Found large distance between start pos in level {}, core index: {}, core.start: {}, core.end: {}, prev_core.start: {}, prev_core.end: {}", i, index, core.start, core.end, prev_index_start, prev_index_end)
                     }
                     
                     if core.end-core.start < 10000 {
                         lengths[core.end-core.start] += 1;
                     } else {
-                        println!("Found large length in level {}, core index: {}, core.start: {}, core.end: {}", i, index, core.start, core.end)
+                        // println!("Found large length in level {}, core index: {}, core.start: {}, core.end: {}", i, index, core.start, core.end)
                     }
 
                     prev_index_end = core.end;
