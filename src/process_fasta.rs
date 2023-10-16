@@ -7,30 +7,25 @@ use seq_io::fasta::Record;
 use rust_lcp;
 
 
-fn mean(data: &[usize]) -> Option<f32> {
-    let sum = data.iter().sum::<usize>() as f32;
-    let count = data.len();
+fn mean(data: &[usize]) -> f64 {
+    let sum = data.iter().enumerate().map(&|(index, num)|  num * index ).sum::<usize>() as f64;
+    let count = data.iter().sum::<usize>() as f64;
 
-    match count {
-        positive if positive > 0 => Some(sum / count as f32),
-        _ => None,
-    }
+    sum / count as f64
 }
 
 
-fn std_deviation(data: &[usize]) -> Option<f32> {
-    match (mean(data), data.len()) {
-        (Some(data_mean), count) if count > 0 => {
-            let variance = data.iter().map(|value| {
-                let diff = data_mean - (*value as f32);
+fn std_deviation(data: &[usize]) -> f64 {
+    let mean = mean(data);
+    let count = data.iter().sum::<usize>() as f64;
 
-                diff * diff
-            }).sum::<f32>() / count as f32;
+    let variance = data.iter().enumerate().map(|(index, num)| {
+        let diff = mean - (index as f64);
 
-            Some(variance.sqrt())
-        },
-        _ => None
-    }
+        diff * diff * (*num as f64)
+    }).sum::<f64>() / count as f64;
+
+    variance.sqrt()
 }
 
   
@@ -114,10 +109,10 @@ pub fn process_fasta(fasta_path: &str) {
 
                 println!("Level: {}", i);
                 println!("Overlapping core counts:          {}", overlapping_count);
-                println!("Std of distances btw cores:       {:?}", std_deviation(&distances).unwrap());
-                println!("Mean of disntances btw cores:     {:?}", mean(&distances).unwrap());
-                println!("Std of distances btw starts:      {:?}", std_deviation(&distances_pos).unwrap());
-                println!("Mean of disntances btw starts:    {:?}", mean(&distances_pos).unwrap());
+                println!("Std of distances btw cores:       {:?}", std_deviation(&distances));
+                println!("Mean of disntances btw cores:     {:?}", mean(&distances));
+                println!("Std of distances btw starts:      {:?}", std_deviation(&distances_pos));
+                println!("Mean of disntances btw starts:    {:?}", mean(&distances_pos));
                 println!("Std of lengths:                   {:?}", std_deviation(&lengths));
                 println!("Mean of lengths:                  {:?}", mean(&lengths));
                 // println!("Distances: {:?}", distances);
