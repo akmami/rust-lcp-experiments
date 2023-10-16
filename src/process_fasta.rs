@@ -67,16 +67,16 @@ pub fn process_fasta(fasta_path: &str) {
         let mut lcp_str = rust_lcp::String::from_u8(record.seq());
 
         let duration = start.elapsed();
-        println!("Total execution time: {:?}", duration);
-        println!("End of creating string for id: {}", id);
-        println!("Total number of cores: {}", lcp_str.cores.len());
+        println!("Total execution time:             {:?}", duration);
+        println!("End of creating string for id:    {}", id);
+        println!("Total number of cores:            {}", lcp_str.cores.len());
 
         for i in 1..5 {
             let start_level = Instant::now();
             
             lcp_str.deepen();
 
-            println!("End of deepeneing to level: {}", i);
+            println!("End of deepeneing to level:       {}", i);
 
             if lcp_str.cores.len() > 0 {
                 let mut prev_index_end: usize = lcp_str.cores[0].end;
@@ -113,24 +113,24 @@ pub fn process_fasta(fasta_path: &str) {
                 }
 
                 println!("Level: {}", i);
-                println!("Overlapping core counts: {}", overlapping_count);
-                println!("Std of distances btw cores: {:?}", std_deviation(&distances));
-                println!("Mean of disntances btw cores: {:?}", mean(&distances));
-                println!("Std of distances btw starts: {:?}", std_deviation(&distances_pos));
-                println!("Mean of disntances btw starts: {:?}", mean(&distances_pos));
-                println!("Std of lengths: {:?}", std_deviation(&lengths));
-                println!("Mean of lengths: {:?}", mean(&lengths));
+                println!("Overlapping core counts:          {}", overlapping_count);
+                println!("Std of distances btw cores:       {:?}", std_deviation(&distances).unwrap());
+                println!("Mean of disntances btw cores:     {:?}", mean(&distances).unwrap());
+                println!("Std of distances btw starts:      {:?}", std_deviation(&distances_pos).unwrap());
+                println!("Mean of disntances btw starts:    {:?}", mean(&distances_pos).unwrap());
+                println!("Std of lengths:                   {:?}", std_deviation(&lengths));
+                println!("Mean of lengths:                  {:?}", mean(&lengths));
                 // println!("Distances: {:?}", distances);
                 // println!("Lengths: {:?}", lengths);
             }
             
             let duration_level = start_level.elapsed();
-            println!("Total execution time: {:?}", duration_level);
-            println!("Total number of cores: {}", lcp_str.cores.len());
+            println!("Total execution time:             {:?}", duration_level);
+            println!("Total number of cores:            {}", lcp_str.cores.len());
             println!();
         }
 
         let total_duration = start.elapsed();
-        println!("Total execution time of the program: {:?}", total_duration);
+        println!("Total execution time of the program:  {:?}", total_duration);
     }
 }
