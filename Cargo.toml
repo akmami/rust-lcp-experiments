@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 rust-lcp = { git = "https://github.com/akmami/rust-lcp.git" }
 seq_io = { git = "https://github.com/markschl/seq_io" }
-
+flate2 = "1.0.28"
 
 [[bin]]
 name = "main"
