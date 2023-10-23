@@ -15,11 +15,11 @@ pub fn process_fastq(fasta_path: &str) {
         Err(error) => panic!("Error opening fastq file: {:?}.", error),
     };
 
-    let file = File::open("path").unwrap();
-    let file = BufReader::new(file);
-    let file = GzDecoder::new(file);
+    let file = File::open(fasta_path).unwrap();
+    let buf_file = BufReader::new(file);
+    let gz_file = GzDecoder::new(buf_file);
     
-    let buf: Box<dyn BufRead + Send> = Box::new(BufReader::new(file));
+    let buf: Box<dyn BufRead + Send> = Box::new(BufReader::new(gz_file));
     let mut reader  = seq_io::fastq::Reader::new(buf);
 
     let mut num_reads = 0;
